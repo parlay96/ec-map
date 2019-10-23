@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="../dist/echarts.js"></script>
+		<script src="../mapJs/china.js"></script>
+		<title>ECharts 地图</title>
+	</head>
+	<body>
+		 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div id="main" style="width: 800px;height:600px;margin: 0 auto;"></div>
+		<script type="text/javascript">
+			var data = [
+				{name: '洛阳', value: 134},
+				{name: '秦皇岛', value: 136},
+				{name: '株洲', value: 143},
+				{name: '石家庄', value: 147},
+				{name: '莱芜', value: 148},
+				{name: '常德', value: 152},
+				{name: '保定', value: 153},
+				{name: '湘潭', value: 154},
+				{name: '金华', value: 157},
+				{name: '岳阳', value: 169},
+				{name: '长沙', value: 175},
+				{name: '衢州', value: 177},
+				{name: '廊坊', value: 193},
+				{name: '菏泽', value: 194},
+				{name: '合肥', value: 229},
+				{name: '武汉', value: 273},
+				{name: '大庆', value: 279}
+			];
+			var geoCoordMap = {
+				'宜昌':[111.3,30.7],
+				'义乌':[120.06,29.32],
+				'丽水':[119.92,28.45],
+				'洛阳':[112.44,34.7],
+				'秦皇岛':[119.57,39.95],
+				'株洲':[113.16,27.83],
+				'石家庄':[114.48,38.03],
+				'莱芜':[117.67,36.19],
+				'常德':[111.69,29.05],
+				'保定':[115.48,38.85],
+				'湘潭':[112.91,27.87],
+				'金华':[119.64,29.12],
+				'岳阳':[113.09,29.37],
+				'长沙':[113,28.21],
+				'衢州':[118.88,28.97],
+				'廊坊':[116.7,39.53],
+				'菏泽':[115.480656,35.23375],
+				'合肥':[117.27,31.86],
+				'武汉':[114.31,30.52],
+				'大庆':[125.03,46.58]
+			};
+			var convertData = function (data) {
+				var res = [];
+				for (var i = 0; i < data.length; i++) {
+					var geoCoord = geoCoordMap[data[i].name];
+					if (geoCoord) {
+						res.push({
+							name: data[i].name,
+							value: geoCoord.concat(data[i].value)
+						});
+					}
+				}
+				return res;
+			};
+			console.log(convertData(data))
+			// 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+			// 绘制图表
+			myChart.setOption({
+				backgroundColor: 'transparent',
+				grid: { left: '20%', top: '2%', right: '12%', bottom: '18%' },
+				tooltip: {
+					trigger: 'item',
+					formatter(params) {
+						return '111';
+					}
+				},
+				visualMap: {
+
+					// precision:0,
+					// inRange: {
+					//     color: ['#d73435', '#f46e65', '#1493ed', '#4CADF1'],
+					// },
+					textStyle: {
+						color: '#000'
+					}
+				},
+				geo: {
+					map: 'china',
+					itemStyle: {
+						areaColor: '#ebedf0',
+						borderWidth: 1,
+						borderColor: '#fff',
+						emphasis: {
+							borderWidth: 2,
+							borderColor: '#fff',
+							areaColor: '#ebedf0',
+							label: { show: false }
+						}
+					},
+					label: {
+						emphasis: {
+							show: false
+						}
+					}
+				},
+				legend: {
+					orient: 'vertical',
+					top: 'top',
+					left: 'left',
+					data: ['访问量'],
+					textStyle: {
+						color: '#000'
+					}
+				},
+				series: [
+					{
+						// name: "访问量",
+						type: 'scatter',
+						coordinateSystem: 'geo',
+						data: convertData(data),
+						symbolSize: 12,
+						zoom: 1.2,
+						label: {
+							normal: {
+								formatter: '{b}',
+								position: 'right',
+								show: false
+							},
+							emphasis: {
+								show: true
+							}
+						},
+						itemStyle: {
+							normal: {
+								color: '#ddb926'
+							}
+						}
+					}
+				]
+			});
+		</script>	 
+	</body>
+</html>
